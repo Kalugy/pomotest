@@ -10,14 +10,14 @@ As a user, I want to create a new to-do task so that I can keep track of tasks t
 The user should be able to add a new task with a title, optional description, and due date. This task will be saved in the user's task list, allowing them to easily monitor their progress and manage their priorities.
 
 ## **Acceptance Criteria**
-- [ ] Create task.
-- [ ] Delete task:
+- [✅] Create task.
+- [✅] Delete task:
   - **Task Title** (mandatory)
   - **Description** (optional)
   - **Due Date** (optional)
 - [ ] If the title field is left empty, the system should display an error message.
-- [ ] Upon clicking the **"Save"** button:
 - [ ] Pending fix digitaltablet works on vs
+- [ ] Lets save the data with the one selected
 
 
 ## **Additional Notes**
