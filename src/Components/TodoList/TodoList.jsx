@@ -1,11 +1,12 @@
 // src/TodoList.jsx
 import { useState, useEffect } from 'react';
-
+import DeleteIcon from '../../assets/icons/DeleteIcon';
 const API_URL = 'http://localhost:3001/todos';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
 
   // Fetch todos from the backend on component mount
   useEffect(() => {
@@ -52,25 +53,51 @@ const TodoList = () => {
   };
 
   return (
-    <div className="todo-container">
-      <h1>To-Do List</h1>
-      <div className="input-section">
-        <input
-          type="text"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-          placeholder="Enter a task"
-        />
-        <button onClick={addTask}>Add Task</button>
-      </div>
-      <ul className="todo-list">
-        {todos.map((todo) => (
-          <li key={todo.id} className="todo-item">
-            {todo.text}
-            <button onClick={() => deleteTask(todo.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col justify-center gap-1">
+        <h1 className="text-4xl font-bold text-blue-500">To-Do</h1>
+        <div className="flex flex-row gap-2">
+          <input
+            type="text"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+            placeholder="Enter a task"
+            className="input"
+          />
+          <button onClick={addTask} className='primary mb-4'>Add</button>
+        </div>
+        <ul className="flex flex-col justify-left items-left align-middle">
+          {todos.map((todo) => (
+            <li key={todo.id} className="relative flex-row items-center align-middle rounded-lg shadow-lg mb-2 bg-slate-700">
+
+              <div 
+                className="absolute top-2 right-2 ml-2 mb-3 cursor-pointer" 
+                onClick={() => deleteTask(todo.id)}
+              >
+                <DeleteIcon 
+                  size={12}
+                  color={'#ef4444'}
+                />
+              </div>
+
+              <div className="flex items-center m-4">
+                <input
+                  type="radio"
+                  id={todo.id}
+                  name="mode"
+                  value={todo.text}
+                  //checked={selectedOption === 'name'}
+                  onChange={(e) => setSelectedOption(todo.id)}
+                  className="radio-input"
+                />
+                <label htmlFor="name" className='ml-2' >
+                  <p className='font-semibold'>{todo.text} </p>
+                </label>
+              </div>
+              
+              
+            </li>
+          ))}
+        </ul>
     </div>
   );
 };

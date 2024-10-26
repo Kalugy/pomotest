@@ -1,19 +1,17 @@
 // src/App.jsx
-import { useState } from 'react';
 import Timer from './Components/Timer/Timer';
-import TodoList from './Components/TodoList/TodoList';
 
 const App = () => {
-  const [selectedTodoId, setSelectedTodoId] = useState(null);
-
-
   return (
     <div>
-      <h1>Pomodoro Timer</h1>
-      <Timer todoId={"fdsfs"} />
-      <TodoList 
-        onSelectTodo={setSelectedTodoId} 
-      />
+      <div className="h-screen bg-gray-800 text-white flex flex-col gap-1 items-center justify-center">
+        <h1 className="text-4xl font-bold text-blue-500">Pomodoro Timer</h1>
+        <div>
+          <Timer />
+        </div>
+      </div>
+
+      
     </div>
   );
 };
