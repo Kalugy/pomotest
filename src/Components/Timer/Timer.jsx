@@ -14,12 +14,17 @@ const Timer = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
 
+  //task
+  const [selectedOption, setSelectedOption] = useState('');
+
+
+
   const logSession = async () => {
     const session = {
       date: new Date().toISOString(),
-      state: isBreak ? 'break' : 'work',
-      startTime: isBreak ? 5 : 25,
-      
+      startTime: minutes,
+      isPaused: isPaused,
+      task: selectedOption,
     };
     await fetch(API_URL, {
       method: 'POST',
@@ -32,9 +37,14 @@ const Timer = () => {
     if (isActive) {
       setIsPaused(true);
       setIsActive(false);
+      console.log('hello')
     } else {
       setIsPaused(false);
       setIsActive(true);
+      console.log('hello2222')
+      if(minutes==inputMinutes){
+        logSession()
+      }
     }
   };
 
@@ -68,9 +78,10 @@ const Timer = () => {
 
 
   return (
-    <div>
+    <div className="h-screen bg-gray-800 text-white flex flex-col gap-1 items-center justify-center">
+      <h1 className="text-4xl font-bold text-blue-500">Timer</h1>
       <div className="box relative">
-      
+      {selectedOption}
       {isEditing ? (
         <div className='flex flex-row gap-2' >
           <input
@@ -87,7 +98,7 @@ const Timer = () => {
       ) : (
         <div className='flex flex-col justify-center '>
         <div className="flex justify-center text-3xl my-4">
-          <div className="absolute right-20 cursor-pointer text-gray-200 hover:text-blue-500"
+          <div className="cursor-pointer text-gray-200 hover:text-blue-500"
             onClick={() => setIsEditing(!isEditing)}
           >
             <EditIcon
@@ -110,7 +121,7 @@ const Timer = () => {
         </div>
       )}
       </div>
-      <TodoList />
+      <TodoList setSelectedOption={setSelectedOption} />
     </div>
   );
 };

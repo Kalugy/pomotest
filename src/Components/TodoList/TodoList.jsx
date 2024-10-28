@@ -3,11 +3,10 @@ import { useState, useEffect } from 'react';
 import DeleteIcon from '../../assets/icons/DeleteIcon';
 const API_URL = 'http://localhost:3001/todos';
 
-const TodoList = () => {
+const TodoList = ({setSelectedOption}) => {
   const [todos, setTodos] = useState([]);
   const [task, setTask] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
-
+  
   // Fetch todos from the backend on component mount
   useEffect(() => {
     fetchTodos();
@@ -40,7 +39,7 @@ const TodoList = () => {
 
   const addTask = () => {
     if (task.trim()) {
-      const newTodo = { text: task, id: Date.now() };
+      const newTodo = { text: task, id: Date.now(), counterTask: 0 };
       const updatedTodos = [...todos, newTodo];
       saveTodos(updatedTodos);
       setTask('');
@@ -68,7 +67,6 @@ const TodoList = () => {
         <ul className="flex flex-col justify-left items-left align-middle">
           {todos.map((todo) => (
             <li key={todo.id} className="relative flex-row items-center align-middle rounded-lg shadow-lg mb-2 bg-slate-700">
-
               <div 
                 className="absolute top-2 right-2 ml-2 mb-3 cursor-pointer" 
                 onClick={() => deleteTask(todo.id)}

@@ -15,9 +15,11 @@ The user should be able to add a new task with a title, optional description, an
   - **Task Title** (mandatory)
   - **Description** (optional)
   - **Due Date** (optional)
-- [ ] If the title field is left empty, the system should display an error message.
-- [ ] Pending fix digitaltablet works on vs
-- [ ] Lets save the data with the one selected
+- [X] Pending fix digitaltablet works on vs
+- [✅] Lets save the data with the one selected
+- [✅] Create calendar
+- [✅] Create router
+- [ ] Start the timer and that will synch with the calendar  
 
 
 ## **Additional Notes**
