@@ -7,6 +7,7 @@ import About from './Components/About';
 import Timer from './Components/Timer/Timer';
 import Calendar from './Components/Calendar/Calendar';
 import Navbar from './components/Navbar'; // Import Navbar
+import Schedule from './Components/Schedule/Schedule';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/timer" element={<Timer />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/schedule" element={<Schedule />} />
 
         </Routes>
       

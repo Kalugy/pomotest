@@ -50,3 +50,27 @@ button.secondary {
 .list-item {
   @apply p-4 bg-white shadow flex justify-between items-center rounded;
 }
+
+
+
+.day-grid {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e5e5;
+  background-color: #f9f9f9;
+  height: 100%;
+  position: relative;
+}
+
+.day-grid h3 {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+}
+
+.day-grid .relative {
+  position: relative;
+}
+
+
+

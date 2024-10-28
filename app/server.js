@@ -2,6 +2,8 @@
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
+const dayjs = require('dayjs');
+
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -36,6 +38,53 @@ app.post('/todos', (req, res) => {
   });
 });
 
+// Helper function to read the todos file
+const readTodos = () => {
+  const data = fs.readFileSync(TODOS_FILE, 'utf-8');
+  return JSON.parse(data);
+};
+
+// Helper function to write to the todos file
+const writeTodos = (todos) => {
+  fs.writeFileSync(TODOS_FILE, JSON.stringify(todos, null, 2));
+};
+
+// Endpoint to update the task cycle
+app.put('/todos/:id/cycles', (req, res) => {
+  const { id } = req.params;
+  const { action } = req.body; // 'start' or 'end'
+
+  const todos = readTodos();
+  const task = todos.find((todo) => todo.id === parseInt(id, 10));
+
+  if (!task) {
+    return res.status(404).json({ message: 'Task not found' });
+  }
+
+  // Initialize the cycles array if it doesn't exist
+  if (!task.cycles) {
+    task.cycles = [];
+  }
+
+  if (action === 'start') {
+    // Start a new cycle by pushing a new object with the startDate
+    task.cycles.push({ startDate: dayjs().toISOString() });
+  } else if (action === 'end') {
+    // Find the last cycle and add an endDate to it
+    const lastCycle = task.cycles[task.cycles.length - 1];
+    if (lastCycle && !lastCycle.endDate) {
+      lastCycle.endDate = dayjs().toISOString();
+    } else {
+      return res.status(400).json({ message: 'No active cycle to end' });
+    }
+  } else {
+    return res.status(400).json({ message: 'Invalid action' });
+  }
+
+  writeTodos(todos);
+
+  res.status(200).json({ message: 'Task cycle updated', task });
+});
 
 // Log session data to sessions.json
 app.post('/sessions', (req, res) => {

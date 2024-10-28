@@ -1,6 +1,13 @@
 // src/components/Calendar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+
+const API_URL = 'http://localhost:3001/todos';
+
+const getRandomColor = () => {
+  const colors = ['bg-red-500', 'bg-green-500', 'bg-blue-500', 'bg-yellow-500', 'bg-purple-500'];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -11,12 +18,27 @@ const Calendar = () => {
 
   const hours = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
 
-  const events = [
-    { id: 1, time: '09:00', title: 'Morning Meditation' },
-    { id: 2, time: '14:00', title: 'Team Meeting' },
-    { id: 3, time: '18:00', title: 'Workout Session' },
-  ];
+  // Helper to convert a time string to percentage position on the timeline (0 to 100%)
+  const getPositionPercentage = (time) => {
+    const [hour, minute] = time.split(':').map(Number);
+    return ((hour + minute / 60) / 24) * 100;
+  };
+  const [todos, setTodos] = useState([]);
 
+  // Fetch todos from the backend on component mount
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setTodos(data);
+    } catch (error) {
+      console.error('Error fetching todos:', error);
+    }
+  };
 
   const startOfMonth = currentDate.startOf('month');
   const endOfMonth = currentDate.endOf('month');
@@ -166,30 +188,49 @@ const Calendar = () => {
           <p className="text-xl font-semibold">{currentDate.format('dddd')}</p>
           <p>{currentDate.format('MMMM D, YYYY')}</p>
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-3">
-                {hours.map((hour) => (
-                <div key={hour} className="p-2 text-right text-gray-500">
-                    {hour}
+      {/* Hour markers on the left */}
+      <div className="col-span-3">
+        {hours.map((hour) => (
+          <div key={hour} className="p-2 text-right text-gray-500">
+            {hour}
+          </div>
+        ))}
+      </div>
+
+      {/* Events timeline */}
+      <div className="col-span-9 relative border-l border-gray-300 pl-4">
+        {todos.map((task) =>
+          task.cycles
+            ?.filter((cycle) => cycle.endDate) // Only show cycles with an endDate
+            .map((cycle, index) => {
+              const startPercent = getPositionPercentage(dayjs(cycle.startDate).format('HH:mm'));
+              const endPercent = getPositionPercentage(dayjs(cycle.endDate).format('HH:mm'));
+              const color = getRandomColor(); // Assign a random color to each block
+
+              return (
+                <div
+                  key={`${task.id}-${index}`}
+                  className={`absolute ${color} p-1 rounded-lg shadow-md transition-all duration-300`}
+                  style={{
+                    top: `${startPercent}%`,
+                    height: `${endPercent - startPercent}%`,
+                    width: '90%',
+                  }}
+                >
+                  {/* Name only visible on hover */}
+                  <div className="opacity-0 hover:opacity-100 transition-opacity duration-200">
+                    <p className="text-sm font-semibold">{task.text}</p>
+                    <p className="text-xs">
+                      {dayjs(cycle.startDate).format('HH:mm')} -{' '}
+                      {dayjs(cycle.endDate).format('HH:mm')}
+                    </p>
+                  </div>
                 </div>
-                ))}
-            </div>
-            <div className="col-span-9 border-l border-gray-300 pl-4">
-                {hours.map((hour) => (
-                <div key={hour} className="border-b border-gray-200 py-4">
-                    {events
-                    .filter((event) => event.time.startsWith(hour.slice(0, 2)))
-                    .map((event) => (
-                        <div
-                        key={event.id}
-                        className="bg-blue-500 text-white rounded-lg p-2 mb-2"
-                        >
-                        {event.title}
-                        </div>
-                    ))}
-                </div>
-                ))}
-            </div>
-            </div>
+              );
+            })
+        )}
+      </div>
+    </div>
 
 
         </div>

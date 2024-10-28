@@ -82,13 +82,14 @@ const TodoList = ({setSelectedOption}) => {
                   type="radio"
                   id={todo.id}
                   name="mode"
-                  value={todo.text}
+                  value={todo}
                   //checked={selectedOption === 'name'}
-                  onChange={(e) => setSelectedOption(todo.id)}
+                  onChange={(e) => setSelectedOption(todo)}
                   className="radio-input"
                 />
                 <label htmlFor="name" className='ml-2' >
                   <p className='font-semibold'>{todo.text} </p>
+                  
                 </label>
               </div>
               

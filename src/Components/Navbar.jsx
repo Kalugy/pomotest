@@ -19,6 +19,9 @@ function Navbar() {
       <NavLink to="/timer" className='mx-2 '>
         Timer
       </NavLink>
+      <NavLink to="/schedule" className='mx-2 '>
+        Schedule
+      </NavLink>
     </nav>
   );
 }

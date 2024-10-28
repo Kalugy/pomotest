@@ -4,7 +4,7 @@ import TodoList from '../TodoList/TodoList';
 import EditIcon from '../../assets/icons/EditIcon';
 
 
-const API_URL = 'http://localhost:3001/sessions';
+const API_URL = 'http://localhost:3001';
 
 const Timer = () => {
   const [inputMinutes, setInputMinutes] = useState(25); // User input for minutes
@@ -15,7 +15,7 @@ const Timer = () => {
   const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
 
   //task
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState([]);
 
 
 
@@ -26,12 +26,24 @@ const Timer = () => {
       isPaused: isPaused,
       task: selectedOption,
     };
-    await fetch(API_URL, {
+    await fetch(API_URL + '/sessions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(session),
     });
   };
+
+  const updateFinishCycleTask = async (action) => {
+    const newAction = {
+      action: action
+    };
+
+    await fetch(API_URL + '/todos/'+ selectedOption.id +'/cycles', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newAction),
+    });
+  }
 
   const handleStartPause = () => {
     if (isActive) {
@@ -44,6 +56,7 @@ const Timer = () => {
       console.log('hello2222')
       if(minutes==inputMinutes){
         logSession()
+        updateFinishCycleTask("start");
       }
     }
   };
@@ -72,6 +85,10 @@ const Timer = () => {
           setSeconds((prev) => prev - 1);
         }
       }, 1000);
+    }else if (isActive && minutes === 0 && seconds === 0) {
+      //setIsBreak(!isBreak); // Switch between work and break
+      updateFinishCycleTask("end");
+      handleReset(); // Reset the timer for the next session
     }
     return () => clearInterval(interval);
   }, [isActive, minutes, seconds]);
@@ -81,7 +98,7 @@ const Timer = () => {
     <div className="h-screen bg-gray-800 text-white flex flex-col gap-1 items-center justify-center">
       <h1 className="text-4xl font-bold text-blue-500">Timer</h1>
       <div className="box relative">
-      {selectedOption}
+      
       {isEditing ? (
         <div className='flex flex-row gap-2' >
           <input

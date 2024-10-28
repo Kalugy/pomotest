@@ -19,7 +19,12 @@ The user should be able to add a new task with a title, optional description, an
 - [✅] Lets save the data with the one selected
 - [✅] Create calendar
 - [✅] Create router
-- [ ] Start the timer and that will synch with the calendar  
+- [✅] Start the timer and that will synch with the calendar  
+- [] Start the timer and that will synch calendar (review cases and all uses cases in case mvc is good)  
+- [] Create the new feature shedule
+- [] So people can create a schedule: show weekend and poeple should define how is your ideal week 
+
+- [] review draggable component is a kind of bug
 
 
 ## **Additional Notes**
