@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
 function Navbar() {
-  const activeStyle = { textDecoration: 'underline', fontWeight: 'bold' };
 
   return (
     <nav className='p-2 bg-gray-800 absolute font-semibold underline cursor-pointer'>
@@ -19,8 +18,20 @@ function Navbar() {
       <NavLink to="/timer" className='mx-2 '>
         Timer
       </NavLink>
-      <NavLink to="/schedule" className='mx-2 '>
+      {/* <NavLink to="/schedule" className='mx-2 '>
         Schedule
+      </NavLink> */}
+      <NavLink to="/schedule2" className='mx-2 '>
+        Schedule2
+      </NavLink>
+      {/* <NavLink to="/finance" className='mx-2 '>
+        Finance
+      </NavLink> */}
+      <NavLink to="/finance2" className='mx-2 '>
+        Finance2
+      </NavLink>
+      <NavLink to="/habit" className='mx-2 '>
+        Habit
       </NavLink>
     </nav>
   );

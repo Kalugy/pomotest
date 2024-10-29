@@ -1,6 +1,7 @@
 // src/components/Calendar.jsx
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+import EnableComponent from './EnableComponent';
 
 const API_URL = 'http://localhost:3001/todos';
 
@@ -25,6 +26,11 @@ const Calendar = () => {
   };
   const [todos, setTodos] = useState([]);
 
+  //radios
+  const [enableGoal, setEnableGoal] = useState(false);
+  const [enableFinance, setEnableFinance] = useState(false);
+
+
   // Fetch todos from the backend on component mount
   useEffect(() => {
     fetchTodos();
@@ -34,6 +40,7 @@ const Calendar = () => {
     try {
       const response = await fetch(API_URL);
       const data = await response.json();
+      
       setTodos(data);
     } catch (error) {
       console.error('Error fetching todos:', error);
@@ -80,6 +87,12 @@ const Calendar = () => {
   return (
     <div className="p-6 max-w-4xl mx-auto bg-gray-800 shadow-lg rounded-lg">
       {/* Header with View Toggle */}
+      <EnableComponent 
+        enableGoal={enableGoal}
+        setEnableGoal={setEnableGoal}
+        enableFinance={enableFinance}
+        setEnableFinance={setEnableFinance}
+      />    
       <div className="flex justify-between items-center mb-4">
         <button className="text-blue-500 hover:text-blue-700" onClick={prevPeriod}>
           &larr; Prev
@@ -155,6 +168,8 @@ const Calendar = () => {
             const { days, firstDay } = getDaysInMonth(month);
             return (
               <div key={month} className="bg-gray-800 rounded-lg p-4">
+                {enableGoal && <h2 className="font-semibold">Goal: Read book</h2>}
+                
                 <h3 className="text-center text-lg font-semibold mb-2">
                   {currentDate.month(month).format('MMMM')}
                 </h3>
@@ -177,6 +192,8 @@ const Calendar = () => {
                     </div>
                   ))}
                 </div>
+                {enableFinance && <h2 className="font-semibold">Income: 250 Waste: 50</h2>}
+
               </div>
             );
           })}
@@ -199,14 +216,16 @@ const Calendar = () => {
 
       {/* Events timeline */}
       <div className="col-span-9 relative border-l border-gray-300 pl-4">
+        
         {todos.map((task) =>
+          
           task.cycles
-            ?.filter((cycle) => cycle.endDate) // Only show cycles with an endDate
+            ?.filter((cycle) => cycle.endDate && dayjs(cycle.startDate).format('DD/MM/YY') == dayjs(currentDate).format('DD/MM/YY') ) // Only show cycles with an endDate
             .map((cycle, index) => {
               const startPercent = getPositionPercentage(dayjs(cycle.startDate).format('HH:mm'));
               const endPercent = getPositionPercentage(dayjs(cycle.endDate).format('HH:mm'));
               const color = getRandomColor(); // Assign a random color to each block
-
+              
               return (
                 <div
                   key={`${task.id}-${index}`}
