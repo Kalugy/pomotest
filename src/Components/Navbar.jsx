@@ -33,6 +33,12 @@ function Navbar() {
       <NavLink to="/habit" className='mx-2 '>
         Habit
       </NavLink>
+      <NavLink to="/goal" className='mx-2 '>
+        Goal
+      </NavLink>
+      <NavLink to="/user" className='mx-2 '>
+        User
+      </NavLink>
     </nav>
   );
 }

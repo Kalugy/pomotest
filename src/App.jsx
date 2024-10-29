@@ -13,6 +13,8 @@ import Schedule2 from './Components/Schedule2/index';
 import Index from './Components/Finance/index';
 import Index2 from './Components/Finance2/index';
 import IndexHabit from './Components/Habit/index';
+import IndexGoal from './Components/Goal/Index';
+import IndexUser from './Components/User/Index';
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
           <Route path="/finance" element={<Index />} />
           <Route path="/finance2" element={<Index2 />} />
           <Route path="/habit" element={<IndexHabit />} />
+          <Route path="/goal" element={<IndexGoal />} />
+          <Route path="/user" element={<IndexUser />} />
 
 
         </Routes>
